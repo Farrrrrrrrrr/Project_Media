@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.title("Social Media Analytical Dashboard")
-st.header("Welcome to our Social Media Analytical Dashboard")
+st.header("Media Portal for Lisa Halaby")
 
 import pandas as pd
 import numpy as np
