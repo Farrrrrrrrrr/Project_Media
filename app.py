@@ -17,6 +17,15 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+st.markdown(
+        """
+        <div style='text-align: center;'>
+            <a href="privacy_policy.md" target="_blank" style='color: #2196F3; text-decoration: none;'>Privacy Policy</a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+st.markdown("<hr style='border: 1px solid #2196F3;'>", unsafe_allow_html=True)
 
 st.markdown(
     "<h1 style='text-align: center; color: blue;'>Social Media Analytical Dashboard</h1>",
@@ -26,6 +35,16 @@ st.markdown(
     "<h2 style='text-align: center; color: navy;'>Media Portal for Lisa Halaby</h2>",
     unsafe_allow_html=True
 )
+
+st.markdown(
+        """
+        <div style='text-align: center;'>
+            <a href="privacy_policy.md" target="_blank" style='color: #2196F3; text-decoration: none;'>Privacy Policy</a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+st.markdown("<hr style='border: 1px solid #2196F3;'>", unsafe_allow_html=True)
 
 def display_news_articles():
     results = fetch_search_results('Lisa Halaby')
@@ -60,6 +79,9 @@ def display_modular_design():
         """,
         unsafe_allow_html=True
     )
+
+  # Line separator
+
     
     col1, col2 = st.columns([1, 1], gap="small")
     
