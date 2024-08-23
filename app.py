@@ -1,32 +1,32 @@
 import streamlit as st
+from web_crawler import fetch_search_results, scrape_example_website
 
-st.title("Social Media Analytical Dashboard")
-st.header("Media Portal for Lisa Halaby")
+st.markdown(
+    """
+    <style>
+    /* Change the background color of the main content area */
+    .stApp {
+        background-color: #89CFF0;
+    }
 
-import pandas as pd
-import numpy as np
-import requests
-from bs4 import BeautifulSoup
+    /* Optional: Change the color of the sidebar if you have one */
+    .css-1d391kg {
+        background-color: #f0f2f6;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# Create a CSS file (replace 'styles.css' with your actual filename)
-def fetch_search_results(query):
-    api_key = 'AIzaSyCudPyUPvD7W3c34NFdWwlVcxRXCCkGUm8'  # Replace with your API key
-    cse_id = '652a51e9118084553'    # Replace with your CSE ID
-    search_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={api_key}&cx={cse_id}"
-    response = requests.get(search_url)
-    results = response.json()
-    return results.get('items', [])
+st.markdown(
+    "<h1 style='text-align: center; color: blue;'>Social Media Analytical Dashboard</h1>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    "<h2 style='text-align: center; color: navy;'>Media Portal for Lisa Halaby</h2>",
+    unsafe_allow_html=True
+)
 
-def scrape_example_website():
-    url = "https://example.com"  # Replace with the actual URL you want to scrape
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    # Find and return the first paragraph text (or other content)
-    paragraph = soup.find('p')  # This finds the first <p> tag
-    return paragraph.text if paragraph else "No content found."
-
-# Function to display news articles fetched from the search results
 def display_news_articles():
     results = fetch_search_results('Lisa Halaby')
     articles_html = ''.join(
@@ -42,12 +42,31 @@ def display_news_articles():
 
 # Function to display the modular design
 def display_modular_design():
+    # CSS for levitating effect with shadow
+    st.markdown(
+        """
+        <style>
+        .shadow-box {
+            background-color: #2196F3;  /* Blue background */
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* Shadow effect */
+            margin: 20px 0; /* Add some space between columns */
+            height: 100%;
+            overflow: auto;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    
     col1, col2 = st.columns([1, 1], gap="small")
     
     with col1:
         st.markdown(
             f"""
-            <div style='background-color: #2196F3; padding: 10px; border-radius: 10px; color: white; height: 100%; overflow: auto;'>
+            <div class="shadow-box">
                 <h2 style='font-size: 16px;'>News Articles</h2>
                 {display_news_articles()}
             </div>
@@ -59,7 +78,7 @@ def display_modular_design():
         scraped_content = scrape_example_website()
         st.markdown(
             f"""
-            <div style='background-color: #2196F3; padding: 10px; border-radius: 10px; color: white;'>
+            <div class="shadow-box">
                 <h2 style='font-size: 14px; text-align: center;'>Web Scraping Results</h2>
                 <p style='font-size: 12px;'>{scraped_content}</p>
             </div>
@@ -69,7 +88,7 @@ def display_modular_design():
 
     st.markdown(
         """
-        <div style='background-color: #2196F3; width: 512px; height: 200px; margin: 20px auto; border-radius: 10px; padding: 20px; box-sizing: border-box;'>
+        <div class="shadow-box" style='width: 512px; height: 200px; margin: 20px auto;'>
             <h2 style='color: white; text-align: center;'>Middle</h2>
         </div>
         """,
@@ -78,7 +97,7 @@ def display_modular_design():
     
     st.markdown(
         """
-        <div style='background-color: #2196F3; width: 512px; height: 200px; margin: 20px auto; border-radius: 10px; padding: 20px; box-sizing: border-box;'>
+        <div class="shadow-box" style='width: 512px; height: 200px; margin: 20px auto;'>
             <h2 style='color: white; text-align: center;'>Bottom</h2>
         </div>
         """,
