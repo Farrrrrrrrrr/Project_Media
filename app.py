@@ -1,5 +1,6 @@
 import streamlit as st
 from web_crawler import fetch_search_results, scrape_example_website
+from analyze_instagram import analyze_instagram_data
 
 st.markdown(
     """
@@ -35,22 +36,13 @@ st.markdown(
     "<h2 style='text-align: center; color: navy;'>Media Portal for Lisa Halaby</h2>",
     unsafe_allow_html=True
 )
-
-st.markdown(
-        """
-        <div style='text-align: center;'>
-            <a href="privacy_policy.md" target="_blank" style='color: #2196F3; text-decoration: none;'>Privacy Policy</a>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 st.markdown("<hr style='border: 1px solid #2196F3;'>", unsafe_allow_html=True)
 
 def display_news_articles():
     results = fetch_search_results('Lisa Halaby')
     articles_html = ''.join(
         [
-            f"<div style='margin-bottom: 5px;'>"
+            f"<div style='margin-bottom: 1px;'>"
             f"<a href='{item['link']}' style='color: white; text-decoration: none;'><h3 style='font-size: 12px;'>{item['title']}</h3></a>"
             f"<p style='color: white; font-size: 10px;'>{item['snippet']}</p>"
             "</div>"
@@ -110,12 +102,17 @@ def display_modular_design():
 
     st.markdown(
         """
-        <div class="shadow-box" style='width: 512px; height: 200px; margin: 20px auto;'>
-            <h2 style='color: white; text-align: center;'>Middle</h2>
-        </div>
+        <div class="shadow-box" style='margin: 20px auto;'>
+            <h2 style='color: white; text-align: center;'>Instagram Engagement Growth</h2>
         """,
         unsafe_allow_html=True
     )
+    
+    # Call the analyze_instagram_data function and display the graph
+    graph_file_path = analyze_instagram_data()
+    st.image(graph_file_path, use_column_width=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown(
         """
