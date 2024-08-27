@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 def analyze_instagram_data():
     # Use the specified file path
-    csv_file_path = r'C:\xampp\htdocs\MediaCenter\files\dataset_instagram-api-scraper_2024-08-27_11-40-35-904.csv'
+    csv_file_path = 'files/dataset_instagram-api-scraper_2024-08-27_11-40-35-904.csv'
     
     # Read the CSV file
     df = pd.read_csv(csv_file_path)
