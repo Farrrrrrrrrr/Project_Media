@@ -1,6 +1,7 @@
 import streamlit as st
 from web_crawler import fetch_search_results, scrape_example_website
 from analyze_instagram import analyze_instagram_data
+from analyze_sentiment import analyze_sentiments
 
 st.markdown(
     """
@@ -18,15 +19,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.markdown(
-        """
-        <div style='text-align: center;'>
-            <a href="privacy_policy.md" target="_blank" style='color: #2196F3; text-decoration: none;'>Privacy Policy</a>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-st.markdown("<hr style='border: 1px solid #2196F3;'>", unsafe_allow_html=True)
 
 st.markdown(
     "<h1 style='text-align: center; color: blue;'>Social Media Analytical Dashboard</h1>",
@@ -43,8 +35,8 @@ def display_news_articles():
     articles_html = ''.join(
         [
             f"<div style='margin-bottom: 1px;'>"
-            f"<a href='{item['link']}' style='color: white; text-decoration: none;'><h3 style='font-size: 12px;'>{item['title']}</h3></a>"
-            f"<p style='color: white; font-size: 10px;'>{item['snippet']}</p>"
+            f"<a href='{item['link']}' style='color: white; text-decoration: none;'><h3 style='font-size: 24px;'>{item['title']}</h3></a>"
+            f"<p style='color: white; font-size: 16px;'>{item['snippet']}</p>"
             "</div>"
             for item in results[:3]
         ]
@@ -81,7 +73,7 @@ def display_modular_design():
         st.markdown(
             f"""
             <div class="shadow-box">
-                <h2 style='font-size: 16px;'>News Articles</h2>
+                <h2 style='font-size: 18px;'>News Articles</h2>
                 {display_news_articles()}
             </div>
             """,
@@ -100,28 +92,32 @@ def display_modular_design():
             unsafe_allow_html=True
         )
 
+    col3 = st.container()
+    
     st.markdown(
         """
-        <div class="shadow-box" style='margin: 20px auto;'>
+        <div class="shadow-box" style='width: 512px; margin: 20px auto;'>
             <h2 style='color: white; text-align: center;'>Instagram Engagement Growth</h2>
         """,
         unsafe_allow_html=True
     )
     
     # Call the analyze_instagram_data function and display the graph
-    graph_file_path = analyze_instagram_data()
-    st.image(graph_file_path, use_column_width=True)
+    engagement_fig = analyze_instagram_data()
+    st.plotly_chart(engagement_fig, use_container_width=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown(
         """
-        <div class="shadow-box" style='width: 512px; height: 200px; margin: 20px auto;'>
-            <h2 style='color: white; text-align: center;'>Bottom</h2>
-        </div>
+        <div class="shadow-box" style='width: 512px; margin: 20px auto;'>
+            <h2 style='color: white; text-align: center;'>Sentiment Analysis</h2>
         """,
         unsafe_allow_html=True
     )
+    sentiment_fig = analyze_sentiments()
+    st.plotly_chart(sentiment_fig, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # Main app logic
 st.markdown("<h1 style='text-align: center; color: #2196F3;'></h1>", unsafe_allow_html=True)
