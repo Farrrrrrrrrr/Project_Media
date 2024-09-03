@@ -3,12 +3,16 @@ from web_crawler import fetch_search_results, scrape_example_website
 from analyze_instagram import analyze_instagram_data
 from analyze_sentiment import analyze_sentiments
 
+st.set_page_config(layout="wide", page_title="Media Center")
+scraped_content = scrape_example_website()
+
+
 st.markdown(
     """
     <style>
     /* Change the background color of the main content area */
     .stApp {
-        background-color: #89CFF0;
+        background-color: #002349;
     }
 
     /* Optional: Change the color of the sidebar if you have one */
@@ -21,14 +25,14 @@ st.markdown(
 )
 
 st.markdown(
-    "<h1 style='text-align: center; color: blue;'>Social Media Analytical Dashboard</h1>",
+    "<h1 style='text-align: center; color: #fff;'>Social Media Analytical Dashboard</h1>",
     unsafe_allow_html=True
 )
 st.markdown(
-    "<h2 style='text-align: center; color: navy;'>Media Portal for Lisa Halaby</h2>",
+    "<h2 style='text-align: center; color: #fff;'>Media Portal for Lisa Halaby</h2>",
     unsafe_allow_html=True
 )
-st.markdown("<hr style='border: 1px solid #2196F3;'>", unsafe_allow_html=True)
+st.markdown("<hr style='border: 1px solid #fff;'>", unsafe_allow_html=True)
 
 def display_news_articles():
     results = fetch_search_results('Lisa Halaby')
@@ -50,7 +54,7 @@ def display_modular_design():
         """
         <style>
         .shadow-box {
-            background-color: #2196F3;  /* Blue background */
+            background-color: #2196F3;  
             padding: 10px;
             border-radius: 10px;
             color: white;
@@ -64,36 +68,84 @@ def display_modular_design():
         unsafe_allow_html=True
     )
 
-  # Line separator
+    hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+    st.markdown(hide_default_format, unsafe_allow_html=True)
 
+  # Line separator
+ 
+    #st.markdown()
     
     col1, col2 = st.columns([1, 1], gap="small")
     
     with col1:
         st.markdown(
             f"""
-            <div class="shadow-box">
-                <h2 style='font-size: 18px;'>News Articles</h2>
+            <style>
+            .news {{
+                margin: 5px;
+                background-color: #5F90B2;
+                color: black;
+                font-family: Arial, sans-serif;
+                padding: 15px; 
+            }}
+            .news h2 {{
+                margin: 5px;
+                font-size: 18px;
+                text-align: center;
+            }}
+            </style>
+            <div class="news">
+                <h2>News Articles</h2>
                 {display_news_articles()}
             </div>
             """,
             unsafe_allow_html=True
         )
+
         
     with col2:
-        scraped_content = scrape_example_website()
+        st.markdown(
+            """
+            <style>
+            .content {
+                background-color: #5F90B2;
+                color: black;
+                font-family: Arial, sans-serif;
+                padding: 10px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                padding: 15px; 
+            }
+            .content h2 {
+                font-size: 18px;  /* Matching the font size */
+                text-align: center;
+            }
+            .content p {
+                font-size: 12px;  /* Adjusting the font size for content */
+                text-align: left;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
         st.markdown(
             f"""
-            <div class="shadow-box">
-                <h2 style='font-size: 14px; text-align: center;'>Web Scraping Results</h2>
-                <p style='font-size: 12px;'>{scraped_content}</p>
+            <div class="content">
+                <h2>Web Scraping Results</h2>
+                <p>{scraped_content}</p>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-    col3 = st.container()
-    
+
+   
     st.markdown(
         """
         <div class="shadow-box" style='width: 512px; margin: 20px auto;'>
@@ -108,13 +160,15 @@ def display_modular_design():
     
     st.markdown("</div>", unsafe_allow_html=True)
     
+
     st.markdown(
-        """
-        <div class="shadow-box" style='width: 512px; margin: 20px auto;'>
-            <h2 style='color: white; text-align: center;'>Sentiment Analysis</h2>
-        """,
-        unsafe_allow_html=True
+    """
+    <div class="shadow-box" style='width: 512px; margin: 20px auto;'>
+        <h2 style='color: white; text-align: center;'>Sentiment Analysis</h2>
+    """,
+    unsafe_allow_html=True
     )
+
     sentiment_fig = analyze_sentiments()
     st.plotly_chart(sentiment_fig, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)

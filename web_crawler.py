@@ -1,18 +1,22 @@
 import requests
 from bs4 import BeautifulSoup
-from config import GOOGLE_API_KEY, GOOGLE_CSE_ID
+from sites_to_search import news_sites
 
-def fetch_search_results(query):
-    search_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={GOOGLE_API_KEY}&cx={GOOGLE_CSE_ID}"
-    response = requests.get(search_url)
-    results = response.json()
-    return results.get('items', [])
-
-def scrape_example_website():
-    url = "https://example.com"  # Replace with the actual URL you want to scrape
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    # Find and return the first paragraph text (or other content)
-    paragraph = soup.find('p')  # This finds the first <p> tag
-    return paragraph.text if paragraph else "No content found."
+def news_search(query, num_results):
+    news_links = []
+    for site in news_sites:
+        try:
+            response = requests.get(site, timeout=5)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            for a_tag in soup.find_all('a', href=True):
+                if query.lower() in a_tag.text.lower():
+                    news_links.append((a_tag.text, a_tag['href'], site))
+                    if len(news_links) >= num_results:
+                        return news_links
+        except requests.exceptions.Timeout:
+            print(f"Timeout accessing {site}. Skipping to the next site.")
+            continue  # Skip to the next site if there's a timeout
+        except requests.exceptions.RequestException as e:
+            print(f"Error accessing {site}: {e}")
+            continue  # Skip to the next site if there's another type of error
+    return news_links

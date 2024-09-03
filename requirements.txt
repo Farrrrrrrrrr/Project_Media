@@ -49,3 +49,5 @@ urllib3==2.2.2
 watchdog==4.0.2
 matplotlib
 plotly
+nltk
+googletrans==4.0.0-rc1
