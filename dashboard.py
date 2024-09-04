@@ -1,36 +1,14 @@
 import streamlit as st
 from web_crawler import news_search
 from analyze_instagram import analyze_instagram_data
-from analyze_sentiment import analyze_sentiments
-
+from instagram_sentiment import analyze_sentiments
+from analyze_tiktok import analyze_tiktok_data
 
 st.set_page_config(layout="wide", page_title="Media Center")
 
+st.title("Media Center")
 
-
-st.markdown(
-    """
-    <style>
-    /* Change the background color of the main content area */
-    .stApp {
-        background-color: #002349;
-    }
-
-    /* Optional: Change the color of the sidebar if you have one */
-    .css-1d391kg {
-        background-color: #f0f2f6;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    "<h1 style='text-align: center; color: #fff;'>Media Center</h1>",
-    unsafe_allow_html=True
-)
-
-st.markdown("<hr style='border: 1px solid #fff;'>", unsafe_allow_html=True)
+st.markdown("<hr style='border: 1px solid #acb9bf;'>", unsafe_allow_html=True)
 
 # Function to display the modular design
 
@@ -38,34 +16,60 @@ st.markdown("<hr style='border: 1px solid #fff;'>", unsafe_allow_html=True)
   # Line separator
  
     #st.markdown()
-    
-col1, col2 = st.columns([1, 1], gap="small")
-    
-sentiment_fig = analyze_sentiments()
 
-with col1:
-    st.text("Sentiment Analysis")
+#topcoleft, topcolright = st.column_config
+
+st.markdown(
+    """
+    <style>
+        .centered-text {
+            text-align: center;
+        }
+    </style>
+    <div style="font-size: 18px; font-color: #f4f6f6">
+    
+    Dalam era informasi yang serba cepat seperti sekarang, keberadaan dashboard data analisis menjadi sangat penting dalam dunia politik. Dengan banyaknya data yang tersedia, mulai dari opini publik, tren media sosial, hingga hasil survei, politisi dan tim kampanye dapat dengan cepat dan akurat memahami dinamika yang terjadi di lapangan. Dashboard data analisis memungkinkan pengambilan keputusan yang lebih tepat dengan memvisualisasikan data kompleks secara sederhana dan mudah dipahami. Hal ini tidak hanya membantu dalam menyusun strategi yang efektif, tetapi juga dalam merespon perubahan sentimen publik dengan cepat dan efisien. Dalam konteks persaingan politik yang semakin ketat, kemampuan untuk mengolah dan menganalisis data secara real-time melalui dashboard yang intuitif dan komprehensif dapat menjadi kunci kesuksesan.
+    </div>
+    """,
+    unsafe_allow_html=True
+)    
+st.markdown('')
+
+#Sentiment Analysis
+leftcolumn, rightcolumn = st.columns([1, 2])
+
+with leftcolumn:
+    sentiment_fig = analyze_sentiments()
     st.plotly_chart(sentiment_fig, use_container_width=True)
 
-        
-    # Insert the Plotly figure
+with rightcolumn:
+    st.markdown('#')
+    st.markdown(
+        """
+        <div style="font-size: 18px;">
+        Temukan wawasan berharga dengan fitur Analisis Sentimen.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
-        
-with col2:
-    st.text("Instagram Engagement")
-    engagement_fig = analyze_instagram_data()
-    st.plotly_chart(engagement_fig, use_container_width=True)
-        
-st.markdown(
-"""
-<div class="shadow-box" style='width: 512px; margin: 20px auto;'>
-    <h2 style='color: white; text-align: center;'>Sentiment Analysis</h2>
-""",
-unsafe_allow_html=True
-)
 
-query = st.text_input("Cari di sini")
-num_results = st.slider("Number of results", min_value=1, max_value=10, value=5)
+#Instagram Engagement
+engagement_fig = analyze_instagram_data()
+st.plotly_chart(engagement_fig, use_container_width=True)
+
+#TikTok Engagement
+tiktok_fig = analyze_tiktok_data()
+st.plotly_chart(tiktok_fig, use_container_width=True)
+
+#Search Bar
+searchbar, howmanyselect = st.columns([3,1])
+
+with searchbar:
+    query = st.text_input("Enter search term")
+
+with howmanyselect:
+    num_results = st.number_input("Number of results", min_value=1, max_value=10, value=5)
 
 if query:
     st.write(f'Searching for "{query}"...')
@@ -73,11 +77,12 @@ if query:
     
     if news_links:
         st.write('### Found the following links:')
-        for title, link, site in news_links:
+        for title, link, site, date in news_links:
             st.markdown(f"""
                 <div style='border: 1px solid #ddd; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
                     <h4 style='margin: 0;'><a href='{link}' target='_blank'>{title}</a></h4>
                     <p style='margin: 5px 0;'>Source: <a href='{site}' target='_blank'>{site}</a></p>
+                    <p style='margin: 5px 0;'>Date: {date}</p>
                 </div>
                 """, unsafe_allow_html=True)
     else:

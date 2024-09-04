@@ -1,7 +1,7 @@
 import streamlit as st
 from web_crawler import fetch_search_results, scrape_example_website
 from analyze_instagram import analyze_instagram_data
-from analyze_sentiment import analyze_sentiments
+from instagram_sentiment import analyze_sentiments
 
 st.set_page_config(layout="wide", page_title="Media Center")
 scraped_content = scrape_example_website()
