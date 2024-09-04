@@ -9,7 +9,7 @@ import time
 # Download the VADER lexicon
 nltk.download('vader_lexicon')
 
-def analyze_sentiments():
+def analyze_sentimentszy():
     # Path to the dataset
     csv_file_path = 'files/lisa_halaby.csv'
 
