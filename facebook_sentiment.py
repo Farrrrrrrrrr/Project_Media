@@ -2,9 +2,7 @@ import pandas as pd
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import plotly.express as px
-from googletrans import Translator
-from requests.exceptions import ReadTimeout, RequestException
-import time
+from deep_translator import GoogleTranslator
 
 # Download the VADER lexicon
 nltk.download('vader_lexicon')
@@ -20,7 +18,7 @@ def analyze_facebook_sentiments():
     sia = SentimentIntensityAnalyzer()
 
     # Initialize the translator
-    translator = Translator()
+    translator = GoogleTranslator(source='en', target='id')
 
     # List to store sentiment results
     sentiment_results = {
@@ -36,10 +34,9 @@ def analyze_facebook_sentiments():
             for comment in df[comment_column].dropna():
                 if comment:  # Ensure the comment is not None or empty
                     try:
-                        # Translate comment to English
-                        translated = translator.translate(comment, src='id', dest='en')
-                        translated_comment = translated.text if translated else ''
-                        
+                        # Translate comment from English to Indonesian using deep-translator
+                        translated_comment = translator.translate(comment)
+
                         if translated_comment:  # Ensure the translation is not empty
                             # Analyze sentiment of the translated comment
                             score = sia.polarity_scores(translated_comment)
@@ -51,12 +48,6 @@ def analyze_facebook_sentiments():
                                 sentiment_results['ambivalent'] += 1
                         else:
                             print(f"Translation returned an empty result for comment: {comment}")
-                    except ReadTimeout:
-                        print("ReadTimeout occurred, skipping this comment.")
-                    except RequestException as e:
-                        print(f"RequestException occurred: {e}")
-                        # Optionally, retry or continue after delay
-                        time.sleep(5)
                     except Exception as e:
                         print(f"Unexpected error processing comment: {e}")
 

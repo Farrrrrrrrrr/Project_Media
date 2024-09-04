@@ -2,7 +2,7 @@ import pandas as pd
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import plotly.express as px
-from googletrans import Translator, LANGUAGES
+from deep_translator import GoogleTranslator
 from requests.exceptions import ReadTimeout, RequestException
 import time
 
@@ -20,7 +20,7 @@ def analyze_sentiments():
     sia = SentimentIntensityAnalyzer()
 
     # Initialize the translator
-    translator = Translator()
+    translator = GoogleTranslator(source='id', target='en')
 
     # List to store sentiment results
     sentiment_results = {
@@ -36,9 +36,8 @@ def analyze_sentiments():
             for comment in df[comment_column].dropna():
                 if comment:  # Ensure the comment is not None or empty
                     try:
-                        # Translate comment to English
-                        translated = translator.translate(comment, src='id', dest='en')
-                        translated_comment = translated.text if translated else ''
+                        # Translate comment to English using deep-translator
+                        translated_comment = translator.translate(comment)
                         
                         if translated_comment:  # Ensure the translation is not empty
                             # Analyze sentiment of the translated comment

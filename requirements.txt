@@ -50,4 +50,4 @@ watchdog==4.0.2
 matplotlib
 plotly
 nltk
-googletrans
+deep-translator

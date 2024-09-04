@@ -2,7 +2,7 @@ import pandas as pd
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import plotly.express as px
-from googletrans import Translator, LANGUAGES
+from deep_translator import GoogleTranslator
 from requests.exceptions import ReadTimeout, RequestException
 import time
 
@@ -20,7 +20,7 @@ def analyze_twitter_sentiments():
     sia = SentimentIntensityAnalyzer()
 
     # Initialize the translator
-    translator = Translator()
+    translator = GoogleTranslator(source='id', target='en')
 
     # List to store sentiment results
     sentiment_results = {
@@ -34,8 +34,9 @@ def analyze_twitter_sentiments():
         # Analyze sentiment for each comment
         for comment in df['text'].dropna():
             try:
-                # Translate comment to English
-                translated_comment = translator.translate(comment, src='id', dest='en').text
+                # Translate comment to English using deep-translator
+                translated_comment = translator.translate(comment)
+                
                 # Analyze sentiment of the translated comment
                 score = sia.polarity_scores(translated_comment)
                 if score['compound'] >= 0.05:
