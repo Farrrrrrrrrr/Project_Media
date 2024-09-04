@@ -59,6 +59,6 @@ def analyze_sentiments():
     sentiment_df = pd.DataFrame(list(sentiment_results.items()), columns=['Sentiment', 'Count'])
 
     # Create a pie chart using Plotly
-    fig = px.pie(sentiment_df, names='Sentiment', values='Count', title='Instagram Sentiment Analysis')
+    fig = px.pie(sentiment_df, names='Sentiment', values='Count', title='Sentiment Analysis')
 
     return fig
