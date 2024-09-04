@@ -34,26 +34,31 @@ def analyze_sentiments():
         comment_column = f'latestComments/{i}/text'
         if comment_column in df.columns:
             for comment in df[comment_column].dropna():
-                try:
-                    # Translate comment to English
-                    translated_comment = translator.translate(comment, src='id', dest='en').text
-                    # Analyze sentiment of the translated comment
-                    score = sia.polarity_scores(translated_comment)
-                    if score['compound'] >= 0.05:
-                        sentiment_results['positive'] += 1
-                    elif score['compound'] <= -0.05:
-                        sentiment_results['negative'] += 1
-                    else:
-                        sentiment_results['ambivalent'] += 1
-                except ReadTimeout:
-                    print("ReadTimeout occurred, skipping this comment.")
-                except RequestException as e:
-                    print(f"RequestException occurred: {e}")
-                    # Optionally, retry or continue after delay
-                    time.sleep(5)
-                except Exception as e:
-                    print(f"Unexpected error processing comment: {e}")
-                    # Optionally, log the error or handle it
+                if comment:  # Ensure the comment is not None or empty
+                    try:
+                        # Translate comment to English
+                        translated = translator.translate(comment, src='id', dest='en')
+                        translated_comment = translated.text if translated else ''
+                        
+                        if translated_comment:  # Ensure the translation is not empty
+                            # Analyze sentiment of the translated comment
+                            score = sia.polarity_scores(translated_comment)
+                            if score['compound'] >= 0.05:
+                                sentiment_results['positive'] += 1
+                            elif score['compound'] <= -0.05:
+                                sentiment_results['negative'] += 1
+                            else:
+                                sentiment_results['ambivalent'] += 1
+                        else:
+                            print(f"Translation returned an empty result for comment: {comment}")
+                    except ReadTimeout:
+                        print("ReadTimeout occurred, skipping this comment.")
+                    except RequestException as e:
+                        print(f"RequestException occurred: {e}")
+                        # Optionally, retry or continue after delay
+                        time.sleep(5)
+                    except Exception as e:
+                        print(f"Unexpected error processing comment: {e}")
 
     # Convert results to DataFrame
     sentiment_df = pd.DataFrame(list(sentiment_results.items()), columns=['Sentiment', 'Count'])

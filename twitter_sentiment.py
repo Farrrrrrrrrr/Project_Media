@@ -49,7 +49,7 @@ def analyze_twitter_sentiments():
             except RequestException as e:
                 print(f"RequestException occurred: {e}")
                 # Optionally, retry or continue after delay
-                time.sleep(5)
+                time.sleep(1)
             except Exception as e:
                 print(f"Unexpected error processing comment: {e}")
                 # Optionally, log the error or handle it

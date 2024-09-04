@@ -6,7 +6,6 @@ from analyze_tiktok import analyze_tiktok_data
 from facebook_sentiment import analyze_facebook_sentiments
 from analyze_facebook import analyze_facebook_data
 from twitter_sentiment import analyze_twitter_sentiments
-from sentiment_instagramcopy import analyze_sentimentszy
 
 st.set_page_config(layout="wide", page_title="Media Center")
 
@@ -69,9 +68,6 @@ st.plotly_chart(facebook_fig, use_container_width=True)
 
 sentiment_fig = analyze_sentiments()
 st.plotly_chart(sentiment_fig, use_container_width=True)
-
-this_fig = analyze_sentimentszy()
-st.plotly_chart(this_fig, use_container_width=True)
 
 
 st.markdown(
