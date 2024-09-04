@@ -35,15 +35,21 @@ def analyze_facebook_sentiments():
         for comment in df['text'].dropna():
             try:
                 # Translate comment to English
-                translated_comment = translator.translate(comment, src='id', dest='en').text
-                # Analyze sentiment of the translated comment
-                score = sia.polarity_scores(translated_comment)
-                if score['compound'] >= 0.05:
-                    sentiment_results['positive'] += 1
-                elif score['compound'] <= -0.05:
-                    sentiment_results['negative'] += 1
+                translated_comment = translator.translate(comment, src='id', dest='en')
+                
+                # Check if translation is successful and the text is not None
+                if translated_comment and translated_comment.text:
+                    # Analyze sentiment of the translated comment
+                    score = sia.polarity_scores(translated_comment.text)
+                    if score['compound'] >= 0.05:
+                        sentiment_results['positive'] += 1
+                    elif score['compound'] <= -0.05:
+                        sentiment_results['negative'] += 1
+                    else:
+                        sentiment_results['ambivalent'] += 1
                 else:
-                    sentiment_results['ambivalent'] += 1
+                    print(f"Translation failed or returned empty text for comment: {comment}")
+
             except ReadTimeout:
                 print("ReadTimeout occurred, skipping this comment.")
             except RequestException as e:
@@ -52,7 +58,6 @@ def analyze_facebook_sentiments():
                 time.sleep(5)
             except Exception as e:
                 print(f"Unexpected error processing comment: {e}")
-                # Optionally, log the error or handle it
 
         # Convert results to DataFrame
         sentiment_df = pd.DataFrame(list(sentiment_results.items()), columns=['Sentiment', 'Count'])
