@@ -81,7 +81,6 @@ st.plotly_chart(tiktok_fig, use_container_width=True)
 facebook_engage = analyze_facebook_data()
 st.plotly_chart(facebook_engage, use_container_width=True)
 
-
 #Search Bar
 searchbar, howmanyselect = st.columns([3,1])
 
