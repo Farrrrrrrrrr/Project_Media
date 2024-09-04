@@ -3,6 +3,9 @@ from web_crawler import news_search
 from analyze_instagram import analyze_instagram_data
 from instagram_sentiment import analyze_sentiments
 from analyze_tiktok import analyze_tiktok_data
+from facebook_sentiment import analyze_facebook_sentiments
+from analyze_facebook import analyze_facebook_data
+from twitter_sentiment import analyze_twitter_sentiments
 
 st.set_page_config(layout="wide", page_title="Media Center")
 
@@ -34,25 +37,37 @@ st.markdown(
     unsafe_allow_html=True
 )    
 st.markdown('')
-
+st.markdown(
+        """
+        <div style="font-size: 28px; text-align: center;">
+        Temukan wawasan berharga dengan fitur Analisis Sentimen untuk media sosial.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 #Sentiment Analysis
-leftcolumn, rightcolumn = st.columns([1, 2])
+leftcolumn, middlecolumn, rightcolumn = st.columns([1, 1, 1])
 
 with leftcolumn:
     sentiment_fig = analyze_sentiments()
     st.plotly_chart(sentiment_fig, use_container_width=True)
 
+with middlecolumn:
+    facebook_fig = analyze_facebook_sentiments()
+    st.plotly_chart(facebook_fig, use_container_width=True)
+
 with rightcolumn:
-    st.markdown('#')
-    st.markdown(
+    twit_fig = analyze_twitter_sentiments()
+    st.plotly_chart(twit_fig, use_container_width=True)
+    
+st.markdown(
         """
-        <div style="font-size: 18px;">
-        Temukan wawasan berharga dengan fitur Analisis Sentimen.
+        <div style="font-size: 28px; text-align: center;">
+        Perhatikan data anda dengan tampilan optimal dengan bagan interaktif dan data paling mutakhir oleh API kami.
         </div>
         """,
         unsafe_allow_html=True
     )
-    
 
 #Instagram Engagement
 engagement_fig = analyze_instagram_data()
@@ -61,6 +76,11 @@ st.plotly_chart(engagement_fig, use_container_width=True)
 #TikTok Engagement
 tiktok_fig = analyze_tiktok_data()
 st.plotly_chart(tiktok_fig, use_container_width=True)
+
+#facebook engagement
+facebook_engage = analyze_facebook_data()
+st.plotly_chart(facebook_engage, use_container_width=True)
+
 
 #Search Bar
 searchbar, howmanyselect = st.columns([3,1])
