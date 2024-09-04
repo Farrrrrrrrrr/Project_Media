@@ -51,5 +51,3 @@ matplotlib
 plotly
 nltk
 googletrans==4.0.0-rc1
-gcsfs==2024.6.1
-st-fils-connection
