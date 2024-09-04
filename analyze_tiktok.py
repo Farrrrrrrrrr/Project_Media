@@ -37,7 +37,11 @@ def analyze_tiktok_data(selected_metric='diggCount'):
 
     # Update layout with range slider and dropdown for y-axis selection
     fig.update_layout(
-        title='TikTok Engagement Metrics Over Time',
+        title={
+            'text': "Cumulative TikTok Engagement Growth Over Time",
+            'x': 0.5,  # Center the title
+            'xanchor': 'center'
+        },
         xaxis_title='Date',
         yaxis_title='Counts',
         xaxis=dict(
