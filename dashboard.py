@@ -60,16 +60,6 @@ with rightcolumn:
     twit_fig = analyze_twitter_sentiments()
     st.plotly_chart(twit_fig, use_container_width=True)
 
-twit_fig = analyze_twitter_sentiments()
-st.plotly_chart(twit_fig, use_container_width=True)
-
-facebook_fig = analyze_facebook_sentiments()
-st.plotly_chart(facebook_fig, use_container_width=True)
-
-sentiment_fig = analyze_sentiments()
-st.plotly_chart(sentiment_fig, use_container_width=True)
-
-
 st.markdown(
         """
         <div style="font-size: 28px; text-align: center;">

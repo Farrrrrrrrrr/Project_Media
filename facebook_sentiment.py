@@ -2,7 +2,7 @@ import pandas as pd
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import plotly.express as px
-from googletrans import Translator, LANGUAGES
+from googletrans import Translator
 from requests.exceptions import ReadTimeout, RequestException
 import time
 
@@ -29,45 +29,41 @@ def analyze_facebook_sentiments():
         'ambivalent': 0
     }
 
-    # Check if the 'text' column exists in the DataFrame
-    if 'text' in df.columns:
-        # Analyze sentiment for each comment
-        for comment in df['text'].dropna():
-            try:
-                # Translate comment to English
-                translated_comment = translator.translate(comment, src='id', dest='en')
-                
-                # Check if translation is successful and the text is not None
-                if translated_comment and translated_comment.text:
-                    # Analyze sentiment of the translated comment
-                    score = sia.polarity_scores(translated_comment.text)
-                    if score['compound'] >= 0.05:
-                        sentiment_results['positive'] += 1
-                    elif score['compound'] <= -0.05:
-                        sentiment_results['negative'] += 1
-                    else:
-                        sentiment_results['ambivalent'] += 1
-                else:
-                    print(f"Translation failed or returned empty text for comment: {comment}")
+    # Analyze sentiment for each comment
+    for i in range(10):
+        comment_column = f'text'
+        if comment_column in df.columns:
+            for comment in df[comment_column].dropna():
+                if comment:  # Ensure the comment is not None or empty
+                    try:
+                        # Translate comment to English
+                        translated = translator.translate(comment, src='id', dest='en')
+                        translated_comment = translated.text if translated else ''
+                        
+                        if translated_comment:  # Ensure the translation is not empty
+                            # Analyze sentiment of the translated comment
+                            score = sia.polarity_scores(translated_comment)
+                            if score['compound'] >= 0.05:
+                                sentiment_results['positive'] += 1
+                            elif score['compound'] <= -0.05:
+                                sentiment_results['negative'] += 1
+                            else:
+                                sentiment_results['ambivalent'] += 1
+                        else:
+                            print(f"Translation returned an empty result for comment: {comment}")
+                    except ReadTimeout:
+                        print("ReadTimeout occurred, skipping this comment.")
+                    except RequestException as e:
+                        print(f"RequestException occurred: {e}")
+                        # Optionally, retry or continue after delay
+                        time.sleep(5)
+                    except Exception as e:
+                        print(f"Unexpected error processing comment: {e}")
 
-            except ReadTimeout:
-                print("ReadTimeout occurred, skipping this comment.")
-            except RequestException as e:
-                print(f"RequestException occurred: {e}")
-                # Optionally, retry or continue after delay
-                time.sleep(1)
-            except Exception as e:
-                print(f"Unexpected error processing comment: {e}")
+    # Convert results to DataFrame
+    sentiment_df = pd.DataFrame(list(sentiment_results.items()), columns=['Sentiment', 'Count'])
 
-        # Convert results to DataFrame
-        sentiment_df = pd.DataFrame(list(sentiment_results.items()), columns=['Sentiment', 'Count'])
+    # Create a pie chart using Plotly
+    fig = px.pie(sentiment_df, names='Sentiment', values='Count', title='Sentiment Analysis')
 
-        # Create a pie chart using Plotly
-        fig = px.pie(sentiment_df, names='Sentiment', values='Count', title='Sentiment Analysis')
-
-        # Save the plot to a file or return the figure to display in your application
-        fig.write_html('sentiment_analysis.html')  # Save the plot
-        return fig
-    else:
-        print("Column 'text' not found in the dataset.")
-        return None
+    return fig
