@@ -50,4 +50,4 @@ watchdog==4.0.2
 matplotlib
 plotly
 nltk
-googletrans==4.0.0
+googletrans==3.0.0
